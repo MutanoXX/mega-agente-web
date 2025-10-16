@@ -1,5 +1,8 @@
 // API Configuration - use same origin for better deployment flexibility
-const API_BASE_URL = window.location.origin;
+// Fallback to localhost:8000 if opened via file:// protocol
+const API_BASE_URL = window.location.protocol === 'file:' 
+    ? 'http://localhost:8000' 
+    : window.location.origin;
 
 // DOM Elements
 const chatMessages = document.getElementById('chat-messages');

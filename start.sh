@@ -26,8 +26,12 @@ pip install -q -r requirements.txt
 
 # Start the backend server
 echo ""
-echo "🚀 Starting backend server on http://localhost:8000"
-echo "🌐 Open frontend at: file://$(pwd)/frontend/index.html"
+echo "🚀 Starting Mega Agent..."
+echo ""
+echo "✅ Backend API: http://localhost:8000/api"
+echo "✅ Web Interface: http://localhost:8000"
+echo ""
+echo "📝 Open your browser and navigate to: http://localhost:8000"
 echo ""
 echo "Press Ctrl+C to stop the server"
 echo ""
