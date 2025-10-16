@@ -29,25 +29,14 @@ def check_python_version():
 
 def check_dependencies(base_dir):
     """Check if required dependencies are installed"""
-    print("\n📦 Verificando dependências...")
+    print("\n📦 Verificando e instalando dependências...")
     
-    # Check for minimum required packages
-    try:
-        import fastapi
-        import uvicorn
-        print("✅ Dependências principais instaladas")
-        return
-    except ImportError:
-        pass
-    
-    # Install from requirements.txt
+    # Install from requirements.txt (pip will skip if already satisfied)
     req_file = base_dir / "requirements.txt"
     
     if not req_file.exists():
         print("❌ Arquivo requirements.txt não encontrado!")
         sys.exit(1)
-    
-    print("\n📥 Instalando dependências...")
     
     try:
         subprocess.check_call([
@@ -56,10 +45,11 @@ def check_dependencies(base_dir):
             "pip", 
             "install", 
             "-q",
+            "--disable-pip-version-check",
             "-r", 
             str(req_file)
         ])
-        print("✅ Dependências instaladas com sucesso!")
+        print("✅ Dependências verificadas e instaladas!")
     except subprocess.CalledProcessError:
         print("❌ Erro ao instalar dependências!")
         print(f"   Execute manualmente: pip install -r {req_file}")
@@ -88,8 +78,8 @@ def start_server(base_dir):
     """Start the FastAPI server"""
     print("\n🚀 Iniciando servidor...")
     print("\n" + "-"*60)
-    print("📍 Backend API: http://localhost:8000/api")
-    print("🌐 Interface Web: http://localhost:8000")
+    print("🌐 Acesse: http://localhost:8000")
+    print("📍 API Info: http://localhost:8000/api")
     print("-"*60)
     print("\n💡 Dica: Pressione Ctrl+C para parar o servidor\n")
     
