@@ -17,68 +17,70 @@ async def agent():
 
 
 class TestToolDetermination:
-    """Test tool selection logic"""
+    """Test tool selection logic - uses synchronous agent creation"""
     
-    def test_image_generation_keywords(self):
+    @pytest.fixture
+    def sync_agent(self):
+        """Create a synchronous agent for testing (no async client needed)"""
+        # For these tests we only need the _determine_tool method
+        # which doesn't use the async client
         agent = PollinationsAgent()
-        
+        return agent
+    
+    def test_image_generation_keywords(self, sync_agent):
         # Test various image keywords
-        assert agent._determine_tool("crie uma imagem de um gato") == ToolType.IMAGE_GENERATION
-        assert agent._determine_tool("desenhe um cachorro") == ToolType.IMAGE_GENERATION
-        assert agent._determine_tool("gere uma foto de paisagem") == ToolType.IMAGE_GENERATION
-        assert agent._determine_tool("create a picture of sunset") == ToolType.IMAGE_GENERATION
+        assert sync_agent._determine_tool("crie uma imagem de um gato") == ToolType.IMAGE_GENERATION
+        assert sync_agent._determine_tool("desenhe um cachorro") == ToolType.IMAGE_GENERATION
+        assert sync_agent._determine_tool("gere uma foto de paisagem") == ToolType.IMAGE_GENERATION
+        assert sync_agent._determine_tool("create a picture of sunset") == ToolType.IMAGE_GENERATION
     
-    def test_search_keywords(self):
-        agent = PollinationsAgent()
-        
+    def test_search_keywords(self, sync_agent):
         # Test search keywords
-        assert agent._determine_tool("pesquise sobre IA") == ToolType.SEARCH
-        assert agent._determine_tool("busque informações sobre Python") == ToolType.SEARCH
-        assert agent._determine_tool("search for latest news") == ToolType.SEARCH
-        assert agent._determine_tool("o que está acontecendo no mundo") == ToolType.SEARCH
+        assert sync_agent._determine_tool("pesquise sobre IA") == ToolType.SEARCH
+        assert sync_agent._determine_tool("busque informações sobre Python") == ToolType.SEARCH
+        assert sync_agent._determine_tool("search for latest news") == ToolType.SEARCH
+        assert sync_agent._determine_tool("o que está acontecendo no mundo") == ToolType.SEARCH
     
-    def test_audio_keywords(self):
-        agent = PollinationsAgent()
-        
+    def test_audio_keywords(self, sync_agent):
         # Test audio keywords
-        assert agent._determine_tool("fale olá") == ToolType.TEXT_TO_SPEECH
-        assert agent._determine_tool("diga bom dia") == ToolType.TEXT_TO_SPEECH
-        assert agent._determine_tool("speak this text") == ToolType.TEXT_TO_SPEECH
-        assert agent._determine_tool("gere áudio dizendo teste") == ToolType.TEXT_TO_SPEECH
+        assert sync_agent._determine_tool("fale olá") == ToolType.TEXT_TO_SPEECH
+        assert sync_agent._determine_tool("diga bom dia") == ToolType.TEXT_TO_SPEECH
+        assert sync_agent._determine_tool("speak this text") == ToolType.TEXT_TO_SPEECH
+        assert sync_agent._determine_tool("gere áudio dizendo teste") == ToolType.TEXT_TO_SPEECH
     
-    def test_reasoning_keywords(self):
-        agent = PollinationsAgent()
-        
+    def test_reasoning_keywords(self, sync_agent):
         # Test reasoning keywords
-        assert agent._determine_tool("pense sobre isso") == ToolType.REASONING
-        assert agent._determine_tool("raciocine sobre o problema") == ToolType.REASONING
-        assert agent._determine_tool("think deeply about this") == ToolType.REASONING
-        assert agent._determine_tool("analise profundamente") == ToolType.REASONING
+        assert sync_agent._determine_tool("pense sobre isso") == ToolType.REASONING
+        assert sync_agent._determine_tool("raciocine sobre o problema") == ToolType.REASONING
+        assert sync_agent._determine_tool("think deeply about this") == ToolType.REASONING
+        assert sync_agent._determine_tool("analise profundamente") == ToolType.REASONING
     
-    def test_default_text_generation(self):
-        agent = PollinationsAgent()
-        
+    def test_default_text_generation(self, sync_agent):
         # Test default behavior
-        assert agent._determine_tool("olá, como vai?") == ToolType.TEXT_GENERATION
-        assert agent._determine_tool("explique o que é IA") == ToolType.TEXT_GENERATION
-        assert agent._determine_tool("conte-me uma história") == ToolType.TEXT_GENERATION
+        assert sync_agent._determine_tool("olá, como vai?") == ToolType.TEXT_GENERATION
+        assert sync_agent._determine_tool("explique o que é IA") == ToolType.TEXT_GENERATION
+        assert sync_agent._determine_tool("conte-me uma história") == ToolType.TEXT_GENERATION
 
 
 class TestConversationHistory:
     """Test conversation history management"""
     
-    def test_history_starts_empty(self):
+    @pytest.fixture
+    def sync_agent(self):
+        """Create a synchronous agent for testing"""
         agent = PollinationsAgent()
-        assert len(agent.conversation_history) == 0
+        return agent
     
-    def test_clear_history(self):
-        agent = PollinationsAgent()
-        agent.conversation_history = [
+    def test_history_starts_empty(self, sync_agent):
+        assert len(sync_agent.conversation_history) == 0
+    
+    def test_clear_history(self, sync_agent):
+        sync_agent.conversation_history = [
             {"role": "user", "content": "test"},
             {"role": "assistant", "content": "response"}
         ]
-        agent.clear_history()
-        assert len(agent.conversation_history) == 0
+        sync_agent.clear_history()
+        assert len(sync_agent.conversation_history) == 0
 
 
 @pytest.mark.asyncio

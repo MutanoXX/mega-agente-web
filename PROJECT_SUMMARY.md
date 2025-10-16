@@ -41,11 +41,10 @@ mega-agente-web/
 ├── CONTRIBUTING.md           # Guia de contribuição (215 linhas)
 ├── PROJECT_SUMMARY.md        # Este arquivo
 │
-├── deployment/
-│   ├── Dockerfile            # Container Docker (18 linhas)
-│   ├── docker-compose.yml    # Orquestração (14 linhas)
-│   ├── start.sh              # Script Linux/Mac (37 linhas)
-│   └── start.bat             # Script Windows (38 linhas)
+├── Dockerfile                # Container Docker (18 linhas)
+├── docker-compose.yml        # Orquestração (14 linhas)
+├── start.sh                  # Script Linux/Mac (37 linhas)
+├── start.bat                 # Script Windows (38 linhas)
 │
 ├── requirements.txt          # Dependências Python (9 linhas)
 └── .gitignore               # Arquivos ignorados (51 linhas)
