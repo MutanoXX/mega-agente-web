@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mega Agent - Pollinations.AI</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="logo">
+                    <span class="logo-icon">🤖</span>
+                    Mega Agent
+                </h1>
+                <p class="subtitle">Powered by Pollinations.AI</p>
+            </div>
+
+            <div class="model-selector">
+                <h3>⚙️ Configurações de Modelos</h3>
+                
+                <div class="model-group">
+                    <label for="text-model">💬 Modelo de Texto</label>
+                    <select id="text-model" class="model-select">
+                        <option value="openai">OpenAI (GPT-5 Mini)</option>
+                        <option value="openai-fast">OpenAI Fast (GPT-5 Nano)</option>
+                        <option value="mistral">Mistral</option>
+                        <option value="claude">Claude</option>
+                    </select>
+                </div>
+
+                <div class="model-group">
+                    <label for="search-model">🔍 Modelo de Pesquisa</label>
+                    <select id="search-model" class="model-select">
+                        <option value="searchgpt">SearchGPT</option>
+                    </select>
+                </div>
+
+                <div class="model-group">
+                    <label for="reasoning-model">🧠 Modelo de Raciocínio</label>
+                    <select id="reasoning-model" class="model-select">
+                        <option value="openai-reasoning">O4 Mini</option>
+                        <option value="openai">OpenAI (GPT-5)</option>
+                    </select>
+                </div>
+
+                <div class="model-group">
+                    <label for="image-model">🎨 Modelo de Imagem</label>
+                    <select id="image-model" class="model-select">
+                        <option value="flux">Flux</option>
+                        <option value="flux-realism">Flux Realism</option>
+                        <option value="flux-anime">Flux Anime</option>
+                        <option value="flux-3d">Flux 3D</option>
+                        <option value="turbo">Turbo</option>
+                    </select>
+                </div>
+
+                <div class="model-group">
+                    <label for="audio-voice">🔊 Voz de Áudio</label>
+                    <select id="audio-voice" class="model-select">
+                        <option value="nova">Nova</option>
+                        <option value="alloy">Alloy</option>
+                        <option value="echo">Echo</option>
+                        <option value="fable">Fable</option>
+                        <option value="onyx">Onyx</option>
+                        <option value="shimmer">Shimmer</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <button id="clear-btn" class="clear-button">
+                    🗑️ Limpar Conversa
+                </button>
+                <div class="info">
+                    <p>O agente decide automaticamente qual ferramenta usar baseado na sua mensagem.</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="chat-container">
+            <div class="chat-header">
+                <h2>💬 Chat com o Agente</h2>
+                <div class="status-indicator">
+                    <span class="status-dot"></span>
+                    <span id="status-text">Pronto</span>
+                </div>
+            </div>
+
+            <div id="chat-messages" class="chat-messages">
+                <div class="welcome-message">
+                    <div class="welcome-icon">🚀</div>
+                    <h2>Bem-vindo ao Mega Agent!</h2>
+                    <p>Eu posso ajudá-lo com:</p>
+                    <ul>
+                        <li>💬 Conversas e respostas inteligentes</li>
+                        <li>🎨 Geração de imagens</li>
+                        <li>🔍 Pesquisas na web</li>
+                        <li>🔊 Geração de áudio</li>
+                        <li>🧠 Raciocínio complexo</li>
+                    </ul>
+                    <p class="tip">💡 <strong>Dica:</strong> Apenas escreva sua mensagem e eu decidirei qual ferramenta usar!</p>
+                </div>
+            </div>
+
+            <div class="chat-input-container">
+                <div class="input-wrapper">
+                    <textarea 
+                        id="user-input" 
+                        placeholder="Digite sua mensagem aqui... (Ex: 'Crie uma imagem de um gato', 'Pesquise sobre IA', 'Fale olá')"
+                        rows="1"
+                    ></textarea>
+                    <button id="send-btn" class="send-button">
+                        <span class="send-icon">➤</span>
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
