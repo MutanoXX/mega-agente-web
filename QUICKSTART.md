@@ -4,7 +4,21 @@ Comece a usar o Mega Agent em menos de 5 minutos!
 
 ## 🚀 Instalação Rápida
 
-### Opção 1: Script Automático (Recomendado)
+### Opção 1: Arquivo Único (Mais Simples) ⭐
+
+```bash
+python run.py
+```
+
+**Isso faz tudo automaticamente:**
+1. ✅ Verifica Python 3.8+
+2. ✅ Instala dependências se necessário
+3. ✅ Inicia o servidor
+4. ✅ Abre o navegador automaticamente
+
+**Pronto!** Você já está usando o Mega Agent! 🎉
+
+### Opção 2: Scripts de Inicialização
 
 **Linux/Mac:**
 ```bash
@@ -16,13 +30,7 @@ Comece a usar o Mega Agent em menos de 5 minutos!
 start.bat
 ```
 
-Isso vai:
-1. ✅ Criar ambiente virtual
-2. ✅ Instalar dependências
-3. ✅ Iniciar o servidor
-4. ✅ Abrir o frontend
-
-### Opção 2: Docker (Mais Simples)
+### Opção 3: Docker
 
 ```bash
 docker-compose up
@@ -30,19 +38,18 @@ docker-compose up
 
 Acesse: `http://localhost:8000`
 
-### Opção 3: Manual
+### Opção 4: Manual
 
 ```bash
 # 1. Instalar dependências
 pip install -r requirements.txt
 
-# 2. Iniciar backend
+# 2. Iniciar servidor
 cd backend
 python main.py
-
-# 3. Abrir frontend
-# Abra frontend/index.html no navegador
 ```
+
+Acesse: `http://localhost:8000`
 
 ## 🎯 Primeiros Passos
 

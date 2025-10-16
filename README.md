@@ -28,39 +28,41 @@ Um agente de IA completo que utiliza todas as funcionalidades do Pollinations.AI
 ### Pré-requisitos
 
 - Python 3.8+
-- Node.js (opcional, apenas para desenvolvimento frontend)
 
-### Instalação
+### Instalação e Execução
 
-1. **Clone o repositório**
+**Forma mais simples (recomendada):**
+
 ```bash
-git clone <repository-url>
-cd mega-agente-web
+python run.py
 ```
 
-2. **Instale as dependências do backend**
+Isso vai:
+- ✅ Verificar e instalar dependências automaticamente
+- ✅ Iniciar o servidor backend
+- ✅ Abrir o navegador automaticamente em http://localhost:8000
+
+**Formas alternativas:**
+
+1. **Scripts de inicialização:**
+```bash
+./start.sh  # Linux/Mac
+start.bat   # Windows
+```
+
+2. **Docker:**
+```bash
+docker-compose up
+```
+
+3. **Manual:**
 ```bash
 pip install -r requirements.txt
-```
-
-3. **Inicie o servidor backend**
-```bash
 cd backend
 python main.py
 ```
 
-O servidor estará rodando em `http://localhost:8000`
-
-4. **Abra o frontend**
-
-Simplesmente abra o arquivo `frontend/index.html` no seu navegador, ou use um servidor local:
-
-```bash
-cd frontend
-python -m http.server 8080
-```
-
-Acesse `http://localhost:8080`
+Depois acesse: `http://localhost:8000`
 
 ## 📖 Como Funciona
 

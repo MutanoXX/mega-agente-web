@@ -2,7 +2,15 @@
 
 ## 🚀 Início Rápido
 
-### Opção 1: Script de Inicialização (Recomendado)
+### Opção 1: Arquivo Único (Mais Simples) ⭐
+
+```bash
+python run.py
+```
+
+Isso inicia tudo automaticamente e abre o navegador!
+
+### Opção 2: Scripts de Inicialização
 
 **Linux/Mac:**
 ```bash
@@ -14,25 +22,24 @@
 start.bat
 ```
 
-### Opção 2: Docker
+### Opção 3: Docker
 
 ```bash
 docker-compose up
 ```
 
-### Opção 3: Manual
+### Opção 4: Manual
 
 ```bash
 # Instalar dependências
 pip install -r requirements.txt
 
-# Iniciar backend
+# Iniciar servidor
 cd backend
 python main.py
-
-# Abrir frontend
-# Abra frontend/index.html no navegador
 ```
+
+**Acesse:** http://localhost:8000
 
 ## 💡 Exemplos de Uso
 
