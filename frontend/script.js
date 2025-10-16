@@ -1,5 +1,5 @@
-// API Configuration
-const API_BASE_URL = 'http://localhost:8000';
+// API Configuration - use same origin for better deployment flexibility
+const API_BASE_URL = window.location.origin;
 
 // DOM Elements
 const chatMessages = document.getElementById('chat-messages');
@@ -249,9 +249,16 @@ function updateMessageText(text) {
     scrollToBottom();
 }
 
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
 function formatText(text) {
-    // Simple markdown-like formatting
-    return text
+    // Escape HTML first to prevent XSS, then apply markdown-like formatting
+    const escaped = escapeHtml(text);
+    return escaped
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
         .replace(/\*(.*?)\*/g, '<em>$1</em>')
         .replace(/`(.*?)`/g, '<code>$1</code>')

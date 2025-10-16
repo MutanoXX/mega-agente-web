@@ -294,12 +294,11 @@ class PollinationsAgent:
                 "prompt": user_message
             }
             
-            # Add to conversation history
-            self.conversation_history.append({"role": "user", "content": user_message})
-            self.conversation_history.append({
-                "role": "assistant",
-                "content": f"Imagem gerada com sucesso! URL: {image_url}"
-            })
+            # Add to conversation history (bounded)
+            self._add_to_history_bounded(
+                user_message,
+                f"Imagem gerada com sucesso! URL: {image_url}"
+            )
         
         elif tool_type == ToolType.SEARCH:
             yield {"type": "status", "message": "Pesquisando na web..."}
@@ -311,13 +310,8 @@ class PollinationsAgent:
                     "content": chunk
                 }
             
-            # Add to conversation history and keep it bounded
-            self.conversation_history.append({"role": "user", "content": user_message})
-            self.conversation_history.append({"role": "assistant", "content": full_response})
-            
-            # Keep only last 10 messages (5 exchanges) to prevent unbounded growth
-            if len(self.conversation_history) > 10:
-                self.conversation_history = self.conversation_history[-10:]
+            # Add to conversation history (bounded)
+            self._add_to_history_bounded(user_message, full_response)
         
         elif tool_type == ToolType.TEXT_TO_SPEECH:
             yield {"type": "status", "message": "Gerando áudio..."}
@@ -328,12 +322,11 @@ class PollinationsAgent:
                 "text": user_message
             }
             
-            # Add to conversation history
-            self.conversation_history.append({"role": "user", "content": user_message})
-            self.conversation_history.append({
-                "role": "assistant",
-                "content": f"Áudio gerado com sucesso!"
-            })
+            # Add to conversation history (bounded)
+            self._add_to_history_bounded(
+                user_message,
+                "Áudio gerado com sucesso!"
+            )
         
         elif tool_type == ToolType.REASONING:
             yield {"type": "status", "message": "Pensando profundamente..."}
@@ -349,9 +342,8 @@ class PollinationsAgent:
                     "content": chunk
                 }
             
-            # Add to conversation history
-            self.conversation_history.append({"role": "user", "content": user_message})
-            self.conversation_history.append({"role": "assistant", "content": full_response})
+            # Add to conversation history (bounded)
+            self._add_to_history_bounded(user_message, full_response)
         
         else:  # TEXT_GENERATION
             yield {"type": "status", "message": "Gerando resposta..."}
@@ -367,12 +359,22 @@ class PollinationsAgent:
                     "content": chunk
                 }
             
-            # Add to conversation history
-            self.conversation_history.append({"role": "user", "content": user_message})
-            self.conversation_history.append({"role": "assistant", "content": full_response})
+            # Add to conversation history (bounded)
+            self._add_to_history_bounded(user_message, full_response)
         
         # Signal completion
         yield {"type": "done"}
+    
+    def _add_to_history_bounded(self, user_message: str, assistant_response: str):
+        """
+        Add messages to history and keep it bounded to prevent unbounded growth
+        """
+        self.conversation_history.append({"role": "user", "content": user_message})
+        self.conversation_history.append({"role": "assistant", "content": assistant_response})
+        
+        # Keep only last 10 messages (5 exchanges)
+        if len(self.conversation_history) > 10:
+            self.conversation_history = self.conversation_history[-10:]
     
     def clear_history(self):
         """Clear conversation history"""

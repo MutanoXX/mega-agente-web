@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from typing import Optional, Dict
@@ -37,8 +37,9 @@ class ModelsResponse(BaseModel):
     audio_voices: list
 
 
-@app.get("/")
-async def root():
+@app.get("/api")
+async def api_info():
+    """API information endpoint"""
     return {
         "message": "Mega Agent API - Powered by Pollinations.AI",
         "version": "1.0.0",
