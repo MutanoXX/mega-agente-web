@@ -15,7 +15,7 @@ app = FastAPI(title="Mega Agent API", version="1.0.0")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
+    allow_credentials=False,  # No cookies/auth, so False is safer
     allow_methods=["*"],
     allow_headers=["*"],
 )

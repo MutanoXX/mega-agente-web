@@ -24,10 +24,9 @@
 mega-agente-web/
 ├── backend/
 │   ├── __init__.py           # Package marker
-│   ├── agent.py              # Lógica principal do agente (331 linhas)
-│   ├── config.py             # Configurações (45 linhas)
-│   ├── main.py               # API FastAPI (104 linhas)
-│   └── test_agent.py         # Testes (142 linhas)
+│   ├── agent.py              # Lógica principal do agente (380 linhas)
+│   ├── main.py               # API FastAPI (115 linhas)
+│   └── test_agent.py         # Testes (150 linhas)
 │
 ├── frontend/
 │   ├── index.html            # Interface web (130 linhas)
