@@ -27,68 +27,64 @@ def check_python_version():
     print(f"✅ Python {sys.version_info.major}.{sys.version_info.minor} detectado")
 
 
-def check_dependencies():
+def check_dependencies(base_dir):
     """Check if required dependencies are installed"""
     print("\n📦 Verificando dependências...")
     
-    required_packages = [
-        'fastapi',
-        'uvicorn',
-        'httpx',
-        'pydantic',
-        'aiofiles'
-    ]
+    # Check for minimum required packages
+    try:
+        import fastapi
+        import uvicorn
+        print("✅ Dependências principais instaladas")
+        return
+    except ImportError:
+        pass
     
-    missing_packages = []
+    # Install from requirements.txt
+    req_file = base_dir / "requirements.txt"
     
-    for package in required_packages:
-        try:
-            __import__(package)
-        except ImportError:
-            missing_packages.append(package)
+    if not req_file.exists():
+        print("❌ Arquivo requirements.txt não encontrado!")
+        sys.exit(1)
     
-    if missing_packages:
-        print(f"\n⚠️  Pacotes faltando: {', '.join(missing_packages)}")
-        print("\n📥 Instalando dependências...")
-        
-        try:
-            subprocess.check_call([
-                sys.executable, 
-                "-m", 
-                "pip", 
-                "install", 
-                "-q",
-                "-r", 
-                "requirements.txt"
-            ])
-            print("✅ Dependências instaladas com sucesso!")
-        except subprocess.CalledProcessError:
-            print("❌ Erro ao instalar dependências!")
-            print("   Execute manualmente: pip install -r requirements.txt")
-            sys.exit(1)
-    else:
-        print("✅ Todas as dependências estão instaladas")
+    print("\n📥 Instalando dependências...")
+    
+    try:
+        subprocess.check_call([
+            sys.executable, 
+            "-m", 
+            "pip", 
+            "install", 
+            "-q",
+            "-r", 
+            str(req_file)
+        ])
+        print("✅ Dependências instaladas com sucesso!")
+    except subprocess.CalledProcessError:
+        print("❌ Erro ao instalar dependências!")
+        print(f"   Execute manualmente: pip install -r {req_file}")
+        sys.exit(1)
 
 
-def check_backend_exists():
+def check_backend_exists(base_dir):
     """Check if backend files exist"""
-    backend_path = Path("backend/main.py")
+    backend_path = base_dir / "backend" / "main.py"
     if not backend_path.exists():
-        print("❌ Arquivo backend/main.py não encontrado!")
+        print(f"❌ Arquivo {backend_path} não encontrado!")
         sys.exit(1)
     print("✅ Backend encontrado")
 
 
-def check_frontend_exists():
+def check_frontend_exists(base_dir):
     """Check if frontend files exist"""
-    frontend_path = Path("frontend/index.html")
+    frontend_path = base_dir / "frontend" / "index.html"
     if not frontend_path.exists():
-        print("❌ Arquivo frontend/index.html não encontrado!")
+        print(f"❌ Arquivo {frontend_path} não encontrado!")
         sys.exit(1)
     print("✅ Frontend encontrado")
 
 
-def start_server():
+def start_server(base_dir):
     """Start the FastAPI server"""
     print("\n🚀 Iniciando servidor...")
     print("\n" + "-"*60)
@@ -97,8 +93,8 @@ def start_server():
     print("-"*60)
     print("\n💡 Dica: Pressione Ctrl+C para parar o servidor\n")
     
-    # Change to backend directory
-    os.chdir("backend")
+    # Add base directory to Python path
+    sys.path.insert(0, str(base_dir))
     
     # Start uvicorn server
     try:
@@ -115,10 +111,10 @@ def start_server():
         browser_thread = threading.Thread(target=open_browser, daemon=True)
         browser_thread.start()
         
-        # Start server
+        # Start server (using module path instead of chdir)
         uvicorn.run(
-            "main:app",
-            host="0.0.0.0",
+            "backend.main:app",
+            host="127.0.0.1",  # Localhost only for security
             port=8000,
             log_level="info"
         )
@@ -134,12 +130,18 @@ def start_server():
 def main():
     """Main function"""
     try:
+        # Get the directory where this script is located
+        base_dir = Path(__file__).resolve().parent
+        
+        # Change to the base directory
+        os.chdir(base_dir)
+        
         print_banner()
         check_python_version()
-        check_dependencies()
-        check_backend_exists()
-        check_frontend_exists()
-        start_server()
+        check_dependencies(base_dir)
+        check_backend_exists(base_dir)
+        check_frontend_exists(base_dir)
+        start_server(base_dir)
         
     except KeyboardInterrupt:
         print("\n\n👋 Instalação cancelada. Até logo!")
