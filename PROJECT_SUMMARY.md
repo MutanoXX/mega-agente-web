@@ -34,13 +34,12 @@ mega-agente-web/
 │   ├── styles.css            # Estilos dark theme (495 linhas)
 │   └── script.js             # Lógica frontend (359 linhas)
 │
-├── docs/
-│   ├── README.md             # Documentação principal (187 linhas)
-│   ├── QUICKSTART.md         # Guia rápido (173 linhas)
-│   ├── USAGE.md              # Guia de uso detalhado (349 linhas)
-│   ├── EXAMPLES.md           # Exemplos práticos (447 linhas)
-│   ├── CONTRIBUTING.md       # Guia de contribuição (215 linhas)
-│   └── PROJECT_SUMMARY.md    # Este arquivo
+├── README.md                 # Documentação principal (187 linhas)
+├── QUICKSTART.md             # Guia rápido (173 linhas)
+├── USAGE.md                  # Guia de uso detalhado (349 linhas)
+├── EXAMPLES.md               # Exemplos práticos (447 linhas)
+├── CONTRIBUTING.md           # Guia de contribuição (215 linhas)
+├── PROJECT_SUMMARY.md        # Este arquivo
 │
 ├── deployment/
 │   ├── Dockerfile            # Container Docker (18 linhas)

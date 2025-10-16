@@ -187,6 +187,35 @@ class PollinationsAgent:
                     except json.JSONDecodeError:
                         continue
     
+    def _extract_text_for_tts(self, user_message: str) -> str:
+        """
+        Extract the actual text to speak, removing trigger words
+        """
+        message_lower = user_message.lower()
+        
+        # Common trigger patterns
+        triggers = [
+            ("fale:", "fale:"),
+            ("diga:", "diga:"),
+            ("speak:", "speak:"),
+            ("say:", "say:"),
+            ("fale ", "fale "),
+            ("diga ", "diga "),
+            ("speak ", "speak "),
+            ("say ", "say "),
+        ]
+        
+        for trigger_lower, trigger_original in triggers:
+            if trigger_lower in message_lower:
+                # Find the position and extract text after it
+                idx = message_lower.find(trigger_lower)
+                text = user_message[idx + len(trigger_original):].strip()
+                if text:
+                    return text
+        
+        # If no trigger found, return original message
+        return user_message
+    
     async def generate_audio_url(
         self,
         text: str,
@@ -196,7 +225,10 @@ class PollinationsAgent:
         Generate audio and return its URL
         """
         from urllib.parse import quote
-        encoded_text = quote(f"Say verbatim: {text}")
+        
+        # Extract actual text to speak (remove trigger words)
+        clean_text = self._extract_text_for_tts(text)
+        encoded_text = quote(f"Say verbatim: {clean_text}")
         
         url = f"{self.BASE_URL_TEXT}/{encoded_text}"
         params = {
