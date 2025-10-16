@@ -60,10 +60,10 @@ class PollinationsAgent:
         if any(keyword in message_lower for keyword in audio_keywords):
             return ToolType.TEXT_TO_SPEECH
         
-        # Check for vision keywords
-        vision_keywords = ["analise esta imagem", "o que tem nesta imagem", "descreva a imagem", "analyze image", "what's in this image"]
-        if any(keyword in message_lower for keyword in vision_keywords):
-            return ToolType.VISION
+        # Vision is not yet implemented, so we skip these keywords for now
+        # vision_keywords = ["analise esta imagem", "o que tem nesta imagem", "descreva a imagem", "analyze image", "what's in this image"]
+        # if any(keyword in message_lower for keyword in vision_keywords):
+        #     return ToolType.VISION
         
         # Check for reasoning keywords
         reasoning_keywords = ["pense", "raciocine", "analise profundamente", "think", "reason", "analyze deeply", "complexo"]
@@ -105,7 +105,7 @@ class PollinationsAgent:
             "POST",
             f"{self.BASE_URL_TEXT}/openai",
             json=payload,
-            headers={"Content-Type": "application/json"}
+            headers={"Content-Type": "application/json", "Accept": "text/event-stream"}
         ) as response:
             async for line in response.aiter_lines():
                 if line.startswith("data: "):
@@ -141,17 +141,16 @@ class PollinationsAgent:
         if seed:
             params["seed"] = seed
         
-        # URL encode the prompt
-        from urllib.parse import quote
+        # URL encode the prompt and construct the image URL
+        # The frontend will trigger the actual generation
+        from urllib.parse import quote, urlencode
         encoded_prompt = quote(prompt)
         
-        url = f"{self.BASE_URL_IMAGE}/prompt/{encoded_prompt}"
+        # Build query string
+        query_string = urlencode(params)
+        url = f"{self.BASE_URL_IMAGE}/prompt/{encoded_prompt}?{query_string}"
         
-        # Make request to generate image
-        response = await self.client.get(url, params=params)
-        
-        # Return the final URL (after redirects)
-        return str(response.url)
+        return url
     
     async def search_web(
         self,
@@ -159,18 +158,22 @@ class PollinationsAgent:
         model: str = "searchgpt"
     ) -> AsyncGenerator[str, None]:
         """
-        Search the web using SearchGPT model
+        Search the web using SearchGPT model via POST endpoint for consistent streaming
         """
-        from urllib.parse import quote
-        encoded_query = quote(query)
+        messages = [{"role": "user", "content": query}]
         
-        url = f"{self.BASE_URL_TEXT}/{encoded_query}"
-        params = {
+        payload = {
             "model": model,
-            "stream": "true"
+            "messages": messages,
+            "stream": True
         }
         
-        async with self.client.stream("GET", url, params=params) as response:
+        async with self.client.stream(
+            "POST",
+            f"{self.BASE_URL_TEXT}/openai",
+            json=payload,
+            headers={"Content-Type": "application/json", "Accept": "text/event-stream"}
+        ) as response:
             async for line in response.aiter_lines():
                 if line.startswith("data: "):
                     data = line[6:]

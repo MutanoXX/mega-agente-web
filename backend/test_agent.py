@@ -3,11 +3,12 @@ Simple tests for the Mega Agent
 Run with: pytest test_agent.py
 """
 import pytest
+import pytest_asyncio
 import asyncio
 from agent import PollinationsAgent, ToolType
 
 
-@pytest.fixture
+@pytest_asyncio.fixture
 async def agent():
     """Create an agent instance for testing"""
     agent = PollinationsAgent()
