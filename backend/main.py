@@ -1,9 +1,11 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from typing import Optional, Dict
 import json
+import os
 
 from agent import PollinationsAgent
 
@@ -101,6 +103,12 @@ async def clear_history():
 async def shutdown_event():
     """Cleanup on shutdown"""
     await agent.close()
+
+
+# Mount static files (frontend)
+frontend_path = os.path.join(os.path.dirname(__file__), "..", "frontend")
+if os.path.exists(frontend_path):
+    app.mount("/", StaticFiles(directory=frontend_path, html=True), name="static")
 
 
 if __name__ == "__main__":

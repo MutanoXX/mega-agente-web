@@ -107,6 +107,11 @@ class PollinationsAgent:
             json=payload,
             headers={"Content-Type": "application/json", "Accept": "text/event-stream"}
         ) as response:
+            # Check for HTTP errors
+            if response.status_code != 200:
+                error_text = await response.aread()
+                raise Exception(f"API error {response.status_code}: {error_text.decode()}")
+            
             async for line in response.aiter_lines():
                 if line.startswith("data: "):
                     data = line[6:]
@@ -174,6 +179,11 @@ class PollinationsAgent:
             json=payload,
             headers={"Content-Type": "application/json", "Accept": "text/event-stream"}
         ) as response:
+            # Check for HTTP errors
+            if response.status_code != 200:
+                error_text = await response.aread()
+                raise Exception(f"API error {response.status_code}: {error_text.decode()}")
+            
             async for line in response.aiter_lines():
                 if line.startswith("data: "):
                     data = line[6:]
@@ -301,9 +311,13 @@ class PollinationsAgent:
                     "content": chunk
                 }
             
-            # Add to conversation history
+            # Add to conversation history and keep it bounded
             self.conversation_history.append({"role": "user", "content": user_message})
             self.conversation_history.append({"role": "assistant", "content": full_response})
+            
+            # Keep only last 10 messages (5 exchanges) to prevent unbounded growth
+            if len(self.conversation_history) > 10:
+                self.conversation_history = self.conversation_history[-10:]
         
         elif tool_type == ToolType.TEXT_TO_SPEECH:
             yield {"type": "status", "message": "Gerando áudio..."}
